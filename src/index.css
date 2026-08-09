@@ -16,17 +16,36 @@
   --color-code-bg: #17181c;
 }
 
+:root.dark {
+  --color-canvas: #0c0c0e;
+  --color-surface: #161618;
+  --color-ink: #f4f4f5;
+  --color-ink-soft: #a1a1aa;
+  --color-ink-faint: #71717a;
+  --color-border: #27272a;
+  --color-border-strong: #3a3a3f;
+  --color-accent: #8db3c4;
+  --color-accent-soft: #182428;
+  --color-code-bg: #0a0a0c;
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
   }
   html {
     background: var(--color-canvas);
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
   }
   body {
     font-family: var(--font-sans);
     color: var(--color-ink);
+    background: var(--color-canvas);
     -webkit-font-smoothing: antialiased;
+    transition: background-color 0.15s ease, color 0.15s ease;
   }
   ::selection {
     background: var(--color-accent-soft);

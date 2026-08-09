@@ -5,12 +5,14 @@ import { HookDetail } from './components/HookDetail'
 import { CommandPalette } from './components/CommandPalette'
 import { registry } from './lib/registry'
 import { HOOK_META, type Category } from './lib/meta'
+import { useTheme } from './lib/useTheme'
 
 export default function App() {
   const [view, setView] = useState<'gallery' | 'detail'>('gallery')
   const [activeSlug, setActiveSlug] = useState(registry[0].slug)
   const [category, setCategory] = useState<Category | 'All'>('All')
   const [paletteOpen, setPaletteOpen] = useState(false)
+  const { preference, setPreference } = useTheme()
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -45,14 +47,19 @@ export default function App() {
       <TopNav
         view={view}
         onGoHome={() => setView('gallery')}
-        activeCategory={category}
-        onCategoryChange={setCategory}
         onOpenPalette={() => setPaletteOpen(true)}
-        count={registry.length}
+        themePreference={preference}
+        onThemeChange={setPreference}
       />
 
       {view === 'gallery' ? (
-        <Gallery hooks={filtered} onSelect={selectHook} />
+        <Gallery
+          hooks={filtered}
+          allCount={registry.length}
+          category={category}
+          onCategoryChange={setCategory}
+          onSelect={selectHook}
+        />
       ) : (
         <HookDetail hook={active} onSelect={selectHook} />
       )}
