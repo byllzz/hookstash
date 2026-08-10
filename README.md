@@ -1,14 +1,19 @@
+<p align="center">
+  <a href="https://hookstash.vercel.app/">
+    <img src="./src/assets/preview.png" alt="Hookstash Preview">
+  </a>
+</p>
+
 <div align="center">
 
 # Hookstash
 
 **A small, working shelf of React hooks - browse, preview live, copy, ship.**
 
-[Live demo](https://hookstash.vercel.app/) · [Documentation](https://hookstash.vercel.app/) · [Report a bug](https://github.com/byllzz/hookstash/issues)
+[Live demo](https://hookstash.vercel.app/) · [Report a bug](https://github.com/byllzz/hookstash/issues)
 
 </div>
 
----
 
 ## About
 
@@ -134,11 +139,49 @@ a demo, and follow the existing code style (see any file in `src/hooks`
 for the expected shape: a short docblock, clean TypeScript, proper
 cleanup in `useEffect`).
 
+## Deploy
+
+Deployed on Vercel. Push to your repo and import it in the Vercel dashboard - no config needed, it's a standard Vite app.
+
+If you enjoyed this project, consider giving it a ⭐ on GitHub. It helps others discover the project and motivates future improvements.
+
+# License (MIT)
+
+This project is licensed under the MIT License.
+
+```text
+MIT License
+
+Copyright (c) 2026 Bilal Malik
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
 ## Author
 
-Built by **Bilal** ([@byllzz](https://github.com/byllzz)) -
-[portfolio](https://bilalmlkdev.vercel.app)
+<img src="https://github.com/byllzz.png" width="80" height="80" alt="Bilal Malik (byllzz)" />
 
-## License
+### Bilal Malik
 
-MIT - see [LICENSE](./LICENSE).
+[![Twitter](https://img.shields.io/badge/@bilalmlkdev-1DA1F2?style=flat-square&logo=twitter&logoColor=white)](https://x.com/bilalmlkdev)
+[![GitHub](https://img.shields.io/badge/byllzz-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/byllzz)
+[![Portfolio](https://img.shields.io/badge/Portfolio-000000?style=flat-square&logo=vercel&logoColor=white)](https://bilalmlkdev.vercel.app)
+
+
+© 2026 Hookstash. All rights reserved.
