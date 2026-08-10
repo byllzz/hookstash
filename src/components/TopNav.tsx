@@ -58,7 +58,7 @@ export function TopNav({
             </button>
           )}
           <a
-            href="https://github.com"
+            href="https://github.com/byllzz/hookstash"
             target="_blank"
             rel="noreferrer"
             aria-label="View on GitHub"

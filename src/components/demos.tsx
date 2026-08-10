@@ -7,6 +7,13 @@ import { useMediaQuery } from '../hooks/useMediaQuery'
 import { useCopyToClipboard } from '../hooks/useCopyToClipboard'
 import { useInterval } from '../hooks/useInterval'
 import { useOnScreen } from '../hooks/useOnScreen'
+import { useWindowSize } from '../hooks/useWindowSize'
+import { useHover } from '../hooks/useHover'
+import { useKeyPress } from '../hooks/useKeyPress'
+import { usePrevious } from '../hooks/usePrevious'
+import { useEventListener } from '../hooks/useEventListener'
+import { useThrottle } from '../hooks/useThrottle'
+import { useFetch } from '../hooks/useFetch'
 
 const field =
   'w-full rounded border border-border bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-faint outline-none focus:border-accent transition-colors'
@@ -155,6 +162,125 @@ export function OnScreenDemo() {
         {visible ? 'Now on screen ✓' : 'Scroll to reveal me'}
       </div>
       <p className="mt-24 text-sm text-ink-faint">Bottom padding.</p>
+    </div>
+  )
+}
+
+export function WindowSizeDemo() {
+  const { width, height } = useWindowSize()
+  return (
+    <div className="flex items-center gap-2 text-sm text-ink-soft">
+      <span>Viewport:</span>
+      <span className={pill}>
+        {width} × {height}
+      </span>
+    </div>
+  )
+}
+
+export function HoverDemo() {
+  const [ref, hovered] = useHover<HTMLDivElement>()
+  return (
+    <div
+      ref={ref}
+      className={`flex h-20 items-center justify-center rounded border text-sm transition-colors ${
+        hovered
+          ? 'border-accent bg-accent-soft text-accent'
+          : 'border-border text-ink-faint'
+      }`}
+    >
+      {hovered ? 'Hovering ✓' : 'Hover over me'}
+    </div>
+  )
+}
+
+export function KeyPressDemo() {
+  const shiftPressed = useKeyPress('Shift')
+  return (
+    <div className="text-sm text-ink-soft">
+      Hold <kbd className="rounded border border-border bg-canvas px-1.5 py-0.5 font-mono text-xs">Shift</kbd>:{' '}
+      <span className={pill}>{String(shiftPressed)}</span>
+    </div>
+  )
+}
+
+export function PreviousDemo() {
+  const [count, setCount] = useState(0)
+  const previous = usePrevious(count)
+  return (
+    <div className="space-y-3">
+      <button
+        onClick={() => setCount((c) => c + 1)}
+        className="rounded border border-border bg-surface px-3 py-1.5 text-sm hover:border-border-strong transition-colors"
+      >
+        Increment
+      </button>
+      <div className="text-sm text-ink-soft">
+        Now: <span className={pill}>{count}</span> Previous:{' '}
+        <span className={pill}>{previous ?? '—'}</span>
+      </div>
+    </div>
+  )
+}
+
+export function EventListenerDemo() {
+  const [pos, setPos] = useState({ x: 0, y: 0 })
+  useEventListener('mousemove', (e) => {
+    const evt = e as MouseEvent
+    setPos({ x: Math.round(evt.clientX), y: Math.round(evt.clientY) })
+  })
+  return (
+    <div className="text-sm text-ink-soft">
+      Move your mouse anywhere on the page:
+      <div className="mt-2">
+        <span className={pill}>
+          x: {pos.x}, y: {pos.y}
+        </span>
+      </div>
+    </div>
+  )
+}
+
+export function ThrottleDemo() {
+  const [scrollCount, setScrollCount] = useState(0)
+  const throttled = useThrottle(scrollCount, 800)
+  return (
+    <div className="space-y-3">
+      <button
+        onClick={() => setScrollCount((c) => c + 1)}
+        className="rounded border border-border bg-surface px-3 py-1.5 text-sm hover:border-border-strong transition-colors"
+      >
+        Click rapidly
+      </button>
+      <div className="text-sm text-ink-soft">
+        Raw clicks: <span className={pill}>{scrollCount}</span> Throttled:{' '}
+        <span className={pill}>{throttled}</span>
+      </div>
+    </div>
+  )
+}
+
+export function FetchDemo() {
+  const [url, setUrl] = useState<string | null>(null)
+  const { data, error, loading } = useFetch<{ name: string }>(url)
+  return (
+    <div className="space-y-3">
+      <button
+        onClick={() =>
+          setUrl('https://restcountries.com/v3.1/name/japan?fields=name')
+        }
+        className="rounded border border-border bg-surface px-3 py-1.5 text-sm hover:border-border-strong transition-colors"
+      >
+        Fetch data
+      </button>
+      <div className="text-sm text-ink-soft">
+        {loading && 'Loading…'}
+        {error && <span className="text-red-500">{error}</span>}
+        {!loading && !error && data && (
+          <span className={pill}>{JSON.stringify(data).slice(0, 40)}…</span>
+        )}
+        {!loading && !error && !data && 'Not fetched yet'}
+      </div>
     </div>
   )
 }

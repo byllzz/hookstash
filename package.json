@@ -1,8 +1,16 @@
 {
   "name": "hookstash",
+  "description": "A curated library of React hooks with live demos, copy-paste source, and a CLI installer.",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "author": "Bilal (@byllzz)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/byllzz/hookstash"
+  },
+  "keywords": ["react", "hooks", "typescript", "vite", "tailwindcss"],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Star } from 'lucide-react'
 import type { HookEntry } from '../lib/registry'
 import { registry } from '../lib/registry'
 import { CATEGORY_ACCENT, HOOK_META } from '../lib/meta'
@@ -8,14 +8,19 @@ import { CopyButton } from './CopyButton'
 export function HookDetail({
   hook,
   onSelect,
+  favorites,
+  onToggleFavorite,
 }: {
   hook: HookEntry
   onSelect: (slug: string) => void
+  favorites: string[]
+  onToggleFavorite: (slug: string) => void
 }) {
   const Demo = hook.demo
   const installLine = `import { ${hook.name} } from './hooks/${hook.name}'`
   const meta = HOOK_META[hook.name]
   const accent = meta ? CATEGORY_ACCENT[meta.category] : null
+  const isFav = favorites.includes(hook.slug)
 
   const index = registry.findIndex((h) => h.slug === hook.slug)
   const prev = registry[(index - 1 + registry.length) % registry.length]
@@ -43,9 +48,24 @@ export function HookDetail({
               </span>
             ))}
           </div>
-          <h1 className="font-mono text-2xl font-semibold tracking-tight">
-            {hook.name}
-          </h1>
+          <div className="flex items-start justify-between gap-3">
+            <h1 className="font-mono text-2xl font-semibold tracking-tight">
+              {hook.name}
+            </h1>
+            <button
+              onClick={() => onToggleFavorite(hook.slug)}
+              aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}
+              className="mt-1 flex items-center gap-1.5 rounded border border-border px-2.5 py-1 text-xs text-ink-faint transition-colors hover:border-border-strong hover:text-amber-600"
+            >
+              <Star
+                className="h-3.5 w-3.5"
+                strokeWidth={1.75}
+                fill={isFav ? 'currentColor' : 'none'}
+                color={isFav ? '#d97706' : undefined}
+              />
+              {isFav ? 'Favorited' : 'Favorite'}
+            </button>
+          </div>
           <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">
             {hook.summary}
           </p>

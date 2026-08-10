@@ -1,4 +1,4 @@
-import { ArrowUpRight, Sparkles } from 'lucide-react'
+import { ArrowUpRight, Sparkles, Star } from 'lucide-react'
 import type { HookEntry } from '../lib/registry'
 import { CATEGORY_ORDER, CATEGORY_ACCENT, HOOK_META, type Category } from '../lib/meta'
 
@@ -8,12 +8,20 @@ export function Gallery({
   category,
   onCategoryChange,
   onSelect,
+  favorites,
+  onToggleFavorite,
+  favoritesOnly,
+  onToggleFavoritesOnly,
 }: {
   hooks: HookEntry[]
   allCount: number
   category: Category | 'All'
   onCategoryChange: (c: Category | 'All') => void
   onSelect: (slug: string) => void
+  favorites: string[]
+  onToggleFavorite: (slug: string) => void
+  favoritesOnly: boolean
+  onToggleFavoritesOnly: () => void
 }) {
   return (
     <div className="mx-auto max-w-6xl px-6">
@@ -33,19 +41,32 @@ export function Gallery({
 
       <div className="flex flex-wrap items-center gap-1.5 py-6">
         <FilterPill
-          active={category === 'All'}
-          onClick={() => onCategoryChange('All')}
+          active={category === 'All' && !favoritesOnly}
+          onClick={() => {
+            onCategoryChange('All')
+            if (favoritesOnly) onToggleFavoritesOnly()
+          }}
           label={`All · ${allCount}`}
         />
         {CATEGORY_ORDER.map((c) => (
           <FilterPill
             key={c}
-            active={category === c}
-            onClick={() => onCategoryChange(c)}
+            active={category === c && !favoritesOnly}
+            onClick={() => {
+              onCategoryChange(c)
+              if (favoritesOnly) onToggleFavoritesOnly()
+            }}
             label={c}
             dotClass={CATEGORY_ACCENT[c].dot}
           />
         ))}
+        <span className="mx-1 h-4 w-px bg-border" />
+        <FilterPill
+          active={favoritesOnly}
+          onClick={onToggleFavoritesOnly}
+          label={`Favorites · ${favorites.length}`}
+          icon={<Star className="h-3 w-3" strokeWidth={2} fill={favoritesOnly ? 'currentColor' : 'none'} />}
+        />
       </div>
 
       <div className="pb-16">
@@ -59,38 +80,58 @@ export function Gallery({
               const meta = HOOK_META[hook.name]
               const Icon = meta?.icon
               const accent = meta ? CATEGORY_ACCENT[meta.category] : null
+              const isFav = favorites.includes(hook.slug)
               return (
-                <button
+                <div
                   key={hook.slug}
-                  onClick={() => onSelect(hook.slug)}
-                  className="group flex flex-col items-start rounded-lg border border-border bg-surface p-5 text-left transition-colors hover:border-border-strong"
+                  className="group relative flex flex-col items-start rounded-lg border border-border bg-surface p-5 text-left transition-colors hover:border-border-strong"
                 >
-                  <div className="mb-4 flex w-full items-start justify-between">
-                    {Icon && (
-                      <span className="flex h-9 w-9 items-center justify-center rounded-md bg-canvas">
-                        <Icon className={`h-4.5 w-4.5 ${accent?.text}`} strokeWidth={1.75} />
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      onToggleFavorite(hook.slug)
+                    }}
+                    aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}
+                    className="absolute right-4 top-4 text-ink-faint transition-colors hover:text-amber-500"
+                  >
+                    <Star
+                      className="h-4 w-4"
+                      strokeWidth={1.75}
+                      fill={isFav ? 'currentColor' : 'none'}
+                      color={isFav ? '#d97706' : undefined}
+                    />
+                  </button>
+                  <button
+                    onClick={() => onSelect(hook.slug)}
+                    className="flex w-full flex-col items-start text-left"
+                  >
+                    <div className="mb-4 flex w-full items-start justify-between pr-6">
+                      {Icon && (
+                        <span className="flex h-9 w-9 items-center justify-center rounded-md bg-canvas">
+                          <Icon className={`h-4.5 w-4.5 ${accent?.text}`} strokeWidth={1.75} />
+                        </span>
+                      )}
+                      <ArrowUpRight
+                        className="h-4 w-4 text-ink-faint opacity-0 transition-opacity group-hover:opacity-100"
+                        strokeWidth={1.75}
+                      />
+                    </div>
+                    <h3 className="font-mono text-[15px] font-medium text-ink">
+                      {hook.name}
+                    </h3>
+                    <p className="mt-1.5 text-[13px] leading-relaxed text-ink-soft">
+                      {hook.summary}
+                    </p>
+                    {meta && (
+                      <span
+                        className={`mt-4 flex items-center gap-1.5 text-[11px] font-medium ${accent?.text}`}
+                      >
+                        <span className={`h-1.5 w-1.5 rounded-full ${accent?.dot}`} />
+                        {meta.category}
                       </span>
                     )}
-                    <ArrowUpRight
-                      className="h-4 w-4 text-ink-faint opacity-0 transition-opacity group-hover:opacity-100"
-                      strokeWidth={1.75}
-                    />
-                  </div>
-                  <h3 className="font-mono text-[15px] font-medium text-ink">
-                    {hook.name}
-                  </h3>
-                  <p className="mt-1.5 text-[13px] leading-relaxed text-ink-soft">
-                    {hook.summary}
-                  </p>
-                  {meta && (
-                    <span
-                      className={`mt-4 flex items-center gap-1.5 text-[11px] font-medium ${accent?.text}`}
-                    >
-                      <span className={`h-1.5 w-1.5 rounded-full ${accent?.dot}`} />
-                      {meta.category}
-                    </span>
-                  )}
-                </button>
+                  </button>
+                </div>
               )
             })}
           </div>
@@ -105,11 +146,13 @@ function FilterPill({
   onClick,
   label,
   dotClass,
+  icon,
 }: {
   active: boolean
   onClick: () => void
   label: string
   dotClass?: string
+  icon?: React.ReactNode
 }) {
   return (
     <button
@@ -123,6 +166,7 @@ function FilterPill({
       {dotClass && (
         <span className={`h-1.5 w-1.5 rounded-full ${active ? 'bg-white' : dotClass}`} />
       )}
+      {icon}
       {label}
     </button>
   )
