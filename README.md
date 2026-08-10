@@ -4,7 +4,7 @@
 
 **A small, working shelf of React hooks - browse, preview live, copy, ship.**
 
-[Live demo](#) · [Documentation](#) · [Report a bug](https://github.com/byllzz/hookstash/issues)
+[Live demo](https://hookstash.vercel.app/) · [Documentation](https://hookstash.vercel.app/) · [Report a bug](https://github.com/byllzz/hookstash/issues)
 
 </div>
 
