@@ -8,11 +8,13 @@ import { CopyButton } from './CopyButton'
 export function HookDetail({
   hook,
   onSelect,
+  onBack,
   favorites,
   onToggleFavorite,
 }: {
   hook: HookEntry
   onSelect: (slug: string) => void
+  onBack: () => void
   favorites: string[]
   onToggleFavorite: (slug: string) => void
 }) {
@@ -27,9 +29,16 @@ export function HookDetail({
   const next = registry[(index + 1) % registry.length]
 
   return (
-    <div className="scrollbar-thin h-full overflow-y-auto">
-      <div className="mx-auto max-w-6xl px-6 py-10">
-        <header className="mb-8 max-w-2xl">
+    <div className="mx-auto max-w-6xl px-6 py-10">
+      <button
+        onClick={onBack}
+        className="mb-6 flex items-center gap-1.5 text-sm text-ink-faint transition-colors hover:text-ink-soft"
+      >
+        <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.75} />
+        Back to all hooks
+      </button>
+
+      <header className="mb-8 max-w-2xl">
           <div className="mb-2 flex flex-wrap items-center gap-1.5">
             {meta && (
               <span
@@ -71,7 +80,7 @@ export function HookDetail({
           </p>
         </header>
 
-        {/* Side-by-side: source on the left, live demo on the right — nothing stacked */}
+        {/* Side-by-side: source on the left, live demo on the right - nothing stacked */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_360px]">
           <section>
             <div className="mb-2 flex items-center justify-between">
@@ -100,7 +109,7 @@ export function HookDetail({
           </aside>
         </div>
 
-        <footer className="mt-12 flex items-stretch gap-3 border-t border-border pt-6">
+        <nav className="mt-12 flex items-stretch gap-3 border-t border-border pt-6">
           <button
             onClick={() => onSelect(prev.slug)}
             className="group flex flex-1 items-center gap-3 rounded-lg border border-border px-4 py-3 text-left transition-colors hover:border-border-strong hover:bg-surface"
@@ -121,8 +130,7 @@ export function HookDetail({
             </div>
             <ArrowRight className="h-4 w-4 shrink-0 text-ink-faint group-hover:text-ink-soft" strokeWidth={1.75} />
           </button>
-        </footer>
-      </div>
+        </nav>
     </div>
   )
 }

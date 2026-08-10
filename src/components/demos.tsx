@@ -34,7 +34,7 @@ export function DebounceDemo() {
       />
       <div className="flex items-center gap-2 text-sm text-ink-soft">
         <span>Debounced value:</span>
-        <span className={pill}>{debounced || '—'}</span>
+        <span className={pill}>{debounced || '-'}</span>
       </div>
     </div>
   )
@@ -51,7 +51,7 @@ export function LocalStorageDemo() {
         onChange={(e) => setName(e.target.value)}
       />
       <p className="text-sm text-ink-soft">
-        Refresh the page — this value persists in{' '}
+        Refresh the page - this value persists in{' '}
         <code className="font-mono text-ink">localStorage</code>.
       </p>
     </div>
@@ -217,7 +217,7 @@ export function PreviousDemo() {
       </button>
       <div className="text-sm text-ink-soft">
         Now: <span className={pill}>{count}</span> Previous:{' '}
-        <span className={pill}>{previous ?? '—'}</span>
+        <span className={pill}>{previous ?? '-'}</span>
       </div>
     </div>
   )

@@ -22,7 +22,7 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
         try {
           window.localStorage.setItem(key, JSON.stringify(resolved))
         } catch {
-          // storage full or unavailable — ignore
+          // storage full or unavailable - ignore
         }
         return resolved
       })

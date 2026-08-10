@@ -1,5 +1,5 @@
-import { Command, Search } from 'lucide-react'
 import { ThemeToggle } from './ThemeToggle'
+import type { ReactNode } from 'react'
 import type { ThemePreference } from '../lib/useTheme'
 
 function GithubMark({ className }: { className?: string }) {
@@ -10,53 +10,65 @@ function GithubMark({ className }: { className?: string }) {
   )
 }
 
+type View = 'gallery' | 'detail' | 'docs' | 'playground'
+
 export function TopNav({
   view,
   onGoHome,
-  onOpenPalette,
+  onNavigate,
   themePreference,
   onThemeChange,
 }: {
-  view: 'gallery' | 'detail'
+  view: View
   onGoHome: () => void
-  onOpenPalette: () => void
+  onNavigate: (view: 'docs' | 'playground') => void
   themePreference: ThemePreference
   onThemeChange: (pref: ThemePreference) => void
 }) {
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-canvas/90 backdrop-blur-sm">
-      <div className="mx-auto grid max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-4 px-6 py-3">
-        <button onClick={onGoHome} className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded bg-ink text-xs font-semibold text-white">
-            H
+      <div className="mx-auto flex max-w-6xl items-center gap-6 px-6 py-3">
+       
+
+        <button onClick={onGoHome} className="flex shrink-0 items-center gap-2">
+          <div className="flex h-7 w-7 items-center justify-center rounded bg-solid text-xs font-semibold text-on-solid">
+            <svg
+              fill="currentColor"
+              viewBox="0 0 32 32"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path d="M9.09,15.2458l4.6706,2.2777a1.0706,1.0706,0,0,1-.21,2.0011L8.5087,20.7818a1.0729,1.0729,0,0,1-1.3241-.921,9.2173,9.2173,0,0,1,.4213-3.9965A1.0706,1.0706,0,0,1,9.09,15.2458Z" />
+              <path d="M10.96,24.8605l3.4763-3.8613a1.0707,1.0707,0,0,1,1.8657.7537l-.1814,5.1945a1.072,1.072,0,0,1-1.2491,1.0192A9.3014,9.3014,0,0,1,11.1488,26.46,1.0713,1.0713,0,0,1,10.96,24.8605Z" />
+              <path d="M19.2025,19.7222l4.9412,1.6058a1.0713,1.0713,0,0,1,.6363,1.4794,9.3022,9.3022,0,0,1-2.4707,3.1663,1.072,1.072,0,0,1-1.5914-.2581l-2.7543-4.4078A1.0707,1.0707,0,0,1,19.2025,19.7222Z" />
+              <path d="M24.2273,16.57l-4.9948,1.4321A1.0706,1.0706,0,0,1,18.05,16.3742l2.906-4.3078A1.0706,1.0706,0,0,1,22.55,11.86,9.2168,9.2168,0,0,1,24.9135,15.11,1.0729,1.0729,0,0,1,24.2273,16.57Z" />
+              <path d="M12.5561,4.45a14.9542,14.9542,0,0,0-2.5676.9459,1.07,1.07,0,0,0-.4636,1.5013l4.8819,8.4557a1.0707,1.0707,0,0,0,1.9979-.5353V5.0534A1.07,1.07,0,0,0,15.2526,3.985,14.9577,14.9577,0,0,0,12.5561,4.45Z" />
+            </svg>
           </div>
           <span className="hidden font-semibold tracking-tight sm:inline">
             Hookstash
           </span>
         </button>
 
-        <div className="mx-auto w-full max-w-md">
-          <button
-            onClick={onOpenPalette}
-            className="flex w-full items-center gap-2.5 rounded-full border border-border bg-surface px-4 py-2 text-sm text-ink-faint shadow-sm transition-colors hover:border-border-strong hover:text-ink-soft"
+        <nav className="hidden items-center gap-5 md:flex">
+          <NavLink
+            active={view === "gallery" || view === "detail"}
+            onClick={onGoHome}
           >
-            <Search className="h-4 w-4 shrink-0" strokeWidth={1.75} />
-            <span className="flex-1 text-left">Search hooks…</span>
-            <span className="hidden items-center gap-0.5 rounded border border-border px-1.5 py-0.5 text-[10px] sm:flex">
-              <Command className="h-2.5 w-2.5" strokeWidth={2.5} />K
-            </span>
-          </button>
-        </div>
+            Hooks
+          </NavLink>
+          <NavLink
+            active={view === "playground"}
+            onClick={() => onNavigate("playground")}
+          >
+            Playground
+          </NavLink>
+          <NavLink active={view === "docs"} onClick={() => onNavigate("docs")}>
+            Docs
+          </NavLink>
+        </nav>
 
-        <div className="flex items-center justify-end gap-2">
-          {view === 'detail' && (
-            <button
-              onClick={onGoHome}
-              className="mr-1 hidden text-sm text-ink-faint transition-colors hover:text-ink-soft md:inline"
-            >
-              ← All hooks
-            </button>
-          )}
+        <div className="flex flex-1 items-center justify-end gap-2">
           <a
             href="https://github.com/byllzz/hookstash"
             target="_blank"
@@ -70,5 +82,26 @@ export function TopNav({
         </div>
       </div>
     </header>
+  );
+}
+
+function NavLink({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean
+  onClick: () => void
+  children: ReactNode
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`text-sm transition-colors ${
+        active ? 'font-medium text-ink' : 'text-ink-faint hover:text-ink-soft'
+      }`}
+    >
+      {children}
+    </button>
   )
 }

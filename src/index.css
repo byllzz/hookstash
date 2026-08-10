@@ -14,6 +14,9 @@
   --color-accent: #3f5b6b;
   --color-accent-soft: #eef2f3;
   --color-code-bg: #17181c;
+
+  --color-solid: #18181b;
+  --color-on-solid: #fafafa;
 }
 
 :root.dark {

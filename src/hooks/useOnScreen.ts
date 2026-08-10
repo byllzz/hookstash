@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 /**
  * Reports whether the returned ref's element is currently intersecting
- * the viewport. Built on IntersectionObserver — handy for lazy loading
+ * the viewport. Built on IntersectionObserver - handy for lazy loading
  * and scroll-triggered reveals.
  */
 export function useOnScreen<T extends HTMLElement>(
